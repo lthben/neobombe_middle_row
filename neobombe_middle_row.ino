@@ -13,7 +13,6 @@ Notes:
         - http://www.dunkels.com/adam/pt/ Protothreads for simultaneous control
         - use SINGLE stepping mode to reduce the current loading and heat buildup
 */
-//#include <AccelStepper.h>
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_PWMServoDriver.h"
@@ -23,11 +22,11 @@ const int MOTORSPEED = 20;
 
 Adafruit_MotorShield AFMS_1 = Adafruit_MotorShield(0x60);
 Adafruit_StepperMotor *myStepper_1 = AFMS_1.getStepper(200, 1); //NEMA 17 stepper
-Adafruit_StepperMotor *myStepper_2 = AFMS_1.getStepper(200, 2); //NEMA 17 stepper
+Adafruit_StepperMotor *myStepper_2 = AFMS_1.getStepper(200, 2); 
 
 Adafruit_MotorShield AFMS_2 = Adafruit_MotorShield(0x61);
-Adafruit_StepperMotor *myStepper_3 = AFMS_2.getStepper(513, 1); //small stepper
-Adafruit_StepperMotor *myStepper_4 = AFMS_2.getStepper(513, 2); //small stepper
+Adafruit_StepperMotor *myStepper_3 = AFMS_2.getStepper(200, 1);
+Adafruit_StepperMotor *myStepper_4 = AFMS_2.getStepper(200, 2); 
 
 int ledPin = 5;
 int switchPin = 7;
@@ -47,7 +46,7 @@ void setup() {
   myStepper_2->setSpeed(MOTORSPEED);
   myStepper_3->setSpeed(MOTORSPEED);
   myStepper_4->setSpeed(MOTORSPEED);
-  
+
   Serial.flush();
 }
 
@@ -68,10 +67,10 @@ void loop() {
 
     }
     else if (incoming_byte == 66) {
-            
+
       digitalWrite(ledPin, LOW);
       is_processing = false;
-      
+
       myStepper_1->release();
       myStepper_2->release();
       myStepper_3->release();
@@ -79,10 +78,12 @@ void loop() {
     }
   }
 
-  if (is_processing) myStepper_1->step(8, FORWARD, SINGLE);
-  if (is_processing) myStepper_2->step(8, FORWARD, SINGLE);
-  if (is_processing) myStepper_3->step(20, FORWARD, SINGLE);
-  if (is_processing) myStepper_4->step(20, FORWARD, SINGLE);
+  if (is_processing) {
+    myStepper_1->step(8, FORWARD, SINGLE);
+    myStepper_2->step(8, FORWARD, SINGLE);
+    myStepper_3->step(8, FORWARD, SINGLE);
+    myStepper_4->step(8, FORWARD, SINGLE);
+  }
 
 }
 
